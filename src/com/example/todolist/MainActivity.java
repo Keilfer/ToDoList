@@ -49,7 +49,6 @@ public class MainActivity extends Activity {
 			mainManager = (ToDoMainManager) readObject(this, "listStorage");
 		} catch (IOException e) {
 			mainManager = new ToDoMainManager();
-			System.out.println("new");
 			try {
 				writeObject(this, "listStorage", mainManager);
 			} catch (IOException e1) {
