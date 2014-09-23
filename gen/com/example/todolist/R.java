@@ -24,6 +24,7 @@ public final class R {
     public static final class drawable {
         public static final int change_button=0x7f020000;
         public static final int ic_launcher=0x7f020001;
+        public static final int list_button=0x7f020002;
     }
     public static final class id {
         public static final int ListItemTextView=0x7f080008;
@@ -33,7 +34,7 @@ public final class R {
         public static final int add_list_field=0x7f080004;
         public static final int archive=0x7f08000a;
         public static final int button1=0x7f080007;
-        public static final int checkBox1=0x7f080009;
+        public static final int list_check_box=0x7f080009;
         public static final int list_page_list_view=0x7f080002;
         public static final int main_add_button=0x7f080001;
         public static final int main_list_view=0x7f080000;

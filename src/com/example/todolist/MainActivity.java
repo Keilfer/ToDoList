@@ -1,10 +1,19 @@
 // http://windrealm.org/tutorials/android/android-listview.php
+// http://androidresearch.wordpress.com/2013/04/07/caching-objects-in-android-internal-storage/
 
 package com.example.todolist;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import android.app.ActionBar;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,6 +23,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -34,8 +44,22 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		try {
+			mainManager = (ToDoMainManager) readObject(this, "listStorage");
+		} catch (IOException e) {
+			mainManager = new ToDoMainManager();
+			try {
+				writeObject(this, "listStorage", mainManager);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
 		actionBar = getActionBar();
-		mainManager = new ToDoMainManager();
 		initMainView();
 	}
 	
@@ -79,6 +103,12 @@ public class MainActivity extends Activity {
 					public void onClick(View v) {
 						String newList = editText.getText().toString();
 						mainManager.addItem(newList);
+						try {
+							writeObject(MainActivity.this, "listStorage", mainManager);
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+						
 						mainAdapter.clear();
 						mainAdapter.addAll(mainManager.getItems());
 						mainAdapter.notifyDataSetChanged();
@@ -119,7 +149,16 @@ public class MainActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                     long id) {
             	ListView lv = (ListView) parent;
-                System.out.println(lv.isItemChecked(position));
+            	
+            	CheckBox box = (CheckBox)view.findViewById(R.id.list_check_box);
+            	box.setChecked(lv.isItemChecked(position));
+            	
+            	mainManager.elementAt(listPosition).elementAt(position).setDone(lv.isItemChecked(position));
+            	try {
+					writeObject(MainActivity.this, "listStorage", mainManager);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
             }
         });
 
@@ -143,6 +182,12 @@ public class MainActivity extends Activity {
 					public void onClick(View v) {
 						String newList = editText.getText().toString();
 						mainManager.get(listPosition).addItem(newList);
+						try {
+							writeObject(MainActivity.this, "listStorage", mainManager);
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+						
 						listAdapter.clear();
 						listAdapter.addAll(mainManager.get(listPosition).getItems());
 						listAdapter.notifyDataSetChanged();
@@ -189,6 +234,22 @@ public class MainActivity extends Activity {
         default:
             return super.onOptionsItemSelected(item); 
 		}
+	}
+	
+	public static void writeObject(Context context, String key, Object object) throws IOException {
+	   FileOutputStream fos = context.openFileOutput(key, Context.MODE_PRIVATE);
+	   ObjectOutputStream oos = new ObjectOutputStream(fos);
+	   oos.writeObject(object);
+	   oos.close();
+	   fos.close();
+	}
+	 
+	public static Object readObject(Context context, String key) throws IOException,
+	   ClassNotFoundException, FileNotFoundException {
+	   FileInputStream fis = context.openFileInput(key);
+	   ObjectInputStream ois = new ObjectInputStream(fis);
+	   Object object = ois.readObject();
+	   return object;
 	}
 
 }

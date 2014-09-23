@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 // http://www.ezzylearning.com/tutorial/customizing-android-listview-items-with-custom-arrayadapter
 
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 public class ToDoListPageAdapter extends ArrayAdapter<ToDoItem>{
@@ -35,6 +36,9 @@ public class ToDoListPageAdapter extends ArrayAdapter<ToDoItem>{
         row = inflater.inflate(layoutResourceId, parent, false);
         
         TextView txtTitle = (TextView)row.findViewById(R.id.ListItemTextView);
+        
+        CheckBox box = (CheckBox)row.findViewById(R.id.list_check_box);
+    	box.setChecked(data.get(position).getDone());
         
         txtTitle.setText((CharSequence) data.get(position).getText());
         
