@@ -113,6 +113,15 @@ public class MainActivity extends Activity {
 
 		toDoListView = (ListView) findViewById(R.id.list_page_list_view);
 		toDoListView.setAdapter(listAdapter);
+		
+		toDoListView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                    long id) {
+            	ListView lv = (ListView) parent;
+                System.out.println(lv.isItemChecked(position));
+            }
+        });
 
 		final Button button = (Button) findViewById(R.id.to_do_list_add);
 		button.setOnClickListener(new Button.OnClickListener() {
