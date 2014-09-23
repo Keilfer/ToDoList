@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="1"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    tools:context="com.example.todolist.MainActivity" >
+
+    <ListView
+        android:id="@+id/list_page_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+    </ListView>
+
+    <Button
+        android:id="@+id/to_do_list_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_add" />
+
+</LinearLayout>

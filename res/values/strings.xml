@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ToDoList</string>
+    <string name="button_add">Add</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_display_message">My Message</string>
+    <string name="change_button">></string>
+    <string name="send">Send</string>
+    <string name="archive">View Archive</string>
+    <string name="stats">Stats</string>
+    <string name="title_activity_to_do_list_page">ToDoListPage</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_list_text">New item name</string>
+
+</resources>
