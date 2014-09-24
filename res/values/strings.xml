@@ -14,5 +14,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="cancel">Cancel</string>
     <string name="add_list_text">New item name</string>
+    <string name="done">Done</string>
+    <string name="title_activity_archive">ArchiveActivity</string>
 
 </resources>

@@ -5,13 +5,11 @@
     android:gravity="center_vertical"
     android:orientation="horizontal" >
 
-    <Button
-        android:id="@+id/button1"
-        style="?android:attr/buttonStyleSmall"
+    <ImageView
+        android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/change_button"
-        android:focusable="false" />
+        android:src="@drawable/change_button" />
 
     <TextView
         android:id="@+id/ListItemTextView"
