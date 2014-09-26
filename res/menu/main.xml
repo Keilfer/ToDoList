@@ -11,6 +11,7 @@
         android:id="@+id/stats"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/stats"/>
+        android:title="@string/stats"/>@string/stats@string/stats@string/stats
+    <item android:id="@+id/send" android:title="@string/send" android:orderInCategory="100" android:showAsAction="never"></item>
 
 </menu>

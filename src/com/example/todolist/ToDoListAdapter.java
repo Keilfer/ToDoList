@@ -15,13 +15,13 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-public class ToDoListPageAdapter extends ArrayAdapter<ToDoItem>{
+public class ToDoListAdapter extends ArrayAdapter<ToDoItem>{
 
     Context context; 
     int layoutResourceId;    
     ArrayList<ToDoItem> data = null;
     
-    public ToDoListPageAdapter(Context context, int layoutResourceId, ArrayList<ToDoItem> arrayList) {
+    public ToDoListAdapter(Context context, int layoutResourceId, ArrayList<ToDoItem> arrayList) {
         super(context, layoutResourceId, arrayList);
         this.layoutResourceId = layoutResourceId;
         this.context = context;

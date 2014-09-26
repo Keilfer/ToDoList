@@ -23,11 +23,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ArchiveActivity extends Activity {
 
 	private ListView toDoListView;
-	private ToDoListPageAdapter listAdapter;
+	private ToDoListAdapter listAdapter;
 	private ArrayList<ToDoItem> archive;
 
 	@Override
@@ -45,7 +46,7 @@ public class ArchiveActivity extends Activity {
 			e.printStackTrace();
 		}
 		toDoListView = (ListView) findViewById( R.id.archive_list );
-		listAdapter = new ToDoListPageAdapter(this, R.layout.check_list_item, archive);
+		listAdapter = new ToDoListAdapter(this, R.layout.check_list_item, archive);
 		toDoListView.setAdapter( listAdapter );
 	}
 
@@ -69,8 +70,21 @@ public class ArchiveActivity extends Activity {
 	    switch (item.getItemId()) {
 	    // Respond to the action bar's Up/Home button
 	    case android.R.id.home:
+	    	finish();
 	        NavUtils.navigateUpFromSameTask(this);
 	        return true;
+	    case R.id.archive_send:
+        	String message = "";
+        	String subject = "";
+    		message = "Archived To Do Items\n\n";
+    		subject = "Archived To Do Items";
+			for(Iterator<ToDoItem> i = archive.iterator(); i.hasNext();){
+				ToDoItem currentItem = i.next();
+				if(currentItem.getDone()) message = message.concat("   [X]\t" + currentItem.getText() + "\n");
+				else message = message.concat("   [ ]\t" + currentItem.getText() + "\n");
+			}
+        	sendEmail(subject, message);
+        	return true;
 	    case R.id.archive_stats:
 	    	System.out.println("1");
 			LayoutInflater layoutInflater = (LayoutInflater) getBaseContext()
@@ -115,6 +129,20 @@ public class ArchiveActivity extends Activity {
 			return true;
 	    }
 	    return super.onOptionsItemSelected(item);
+	}
+	
+	public boolean sendEmail(String subject, String content){
+		Intent i = new Intent(Intent.ACTION_SEND);
+		i.setType("message/rfc822"); 
+		i.putExtra(Intent.EXTRA_SUBJECT, subject);
+		i.putExtra(Intent.EXTRA_TEXT   , content);
+		try {
+		    startActivity(Intent.createChooser(i, "Send mail..."));
+		} catch (android.content.ActivityNotFoundException ex) {
+		    Toast.makeText(ArchiveActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+		    return false;
+		}
+		return true;
 	}
 }
 

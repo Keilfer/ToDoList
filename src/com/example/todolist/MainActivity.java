@@ -1,6 +1,7 @@
 // http://windrealm.org/tutorials/android/android-listview.php
 // http://androidresearch.wordpress.com/2013/04/07/caching-objects-in-android-internal-storage/
 // http://www.mikeplate.com/2010/01/21/show-a-context-menu-for-long-clicks-in-an-android-listview/
+// http://stackoverflow.com/questions/2197741/how-can-i-send-emails-from-my-android-application
 
 package com.example.todolist;
 
@@ -35,19 +36,20 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
 	private ListView toDoMainView;
 	private ListView toDoListView;
 	
-	private ToDoMainAdapter mainAdapter;
-	private ToDoMainManager mainManager;
+	private MainListAdapter mainAdapter;
+	private ToDoManager mainManager;
 	
-	private ToDoListPageAdapter listAdapter;
+	private ToDoListAdapter listAdapter;
 	private int listPosition;
 	
-	private int contextMenuTypeID;//0 = main_page_view, 1 = list_page_list_view
+	private int viewSet;//0 = main_page_view, 1 = list_page_list_view
 	private int contextMenuActionTarget;
 	
 	private ArrayList<ToDoItem> archive;
@@ -59,9 +61,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		try {
-			mainManager = (ToDoMainManager) readObject(this, "listStorage");
+			mainManager = (ToDoManager) readObject(this, "listStorage");
 		} catch (IOException e) {
-			mainManager = new ToDoMainManager();
+			mainManager = new ToDoManager();
 			try {
 				writeObject(this, "listStorage", mainManager);
 			} catch (IOException e1) {
@@ -91,10 +93,11 @@ public class MainActivity extends Activity {
 	}
 	
 	public void initMainView(){
+		viewSet = 0;
 		setContentView(R.layout.activity_main);
 		actionBar.setDisplayHomeAsUpEnabled(false);
 
-		mainAdapter = new ToDoMainAdapter(this, R.layout.list_item,
+		mainAdapter = new MainListAdapter(this, R.layout.list_item,
 				mainManager.getItems());
 		
 		toDoMainView = (ListView) findViewById(R.id.main_list_view);
@@ -164,10 +167,11 @@ public class MainActivity extends Activity {
 	}
 	
 	public void initListView(){
+		viewSet = 1;
 		setContentView(R.layout.activity_to_do_list_page);
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
-		listAdapter = new ToDoListPageAdapter(this, R.layout.check_list_item,
+		listAdapter = new ToDoListAdapter(this, R.layout.check_list_item,
 				mainManager.get(listPosition).getItems());
 
 		toDoListView = (ListView) findViewById(R.id.list_page_list_view);
@@ -272,7 +276,7 @@ public class MainActivity extends Activity {
 			int uncheckedToDo = 0;
 			int numberOfLists = 0;
 			
-			for(Iterator<ToDoListManager> i = mainManager.iterator(); i.hasNext();){
+			for(Iterator<ToDoList> i = mainManager.iterator(); i.hasNext();){
 				numberOfLists += 1;
 				for(Iterator<ToDoItem> j = i.next().iterator(); j.hasNext();){
 					if(j.next().getDone()) checkedToDo += 1;
@@ -315,6 +319,34 @@ public class MainActivity extends Activity {
         	Intent intent = new Intent(this, ArchiveActivity.class);
         	startActivity(intent);
         	return true;
+        case R.id.send:
+        	String message = "";
+        	String subject = "";
+        	if(viewSet == 0){
+        		message = "All To Do Lists\n\n";
+        		subject = "All To Do Lists";
+    			for(Iterator<ToDoList> i = mainManager.iterator(); i.hasNext();){
+    				ToDoList currentList = i.next();
+    				message = message.concat(currentList.getName() + "\n");
+    				for(Iterator<ToDoItem> j = currentList.iterator(); j.hasNext();){
+    					ToDoItem currentItem = j.next();
+    					if(currentItem.getDone()) message = message.concat("   [X]\t" + currentItem.getText() + "\n");
+    					else message = message.concat("   [ ]\t" + currentItem.getText() + "\n");
+    				}
+    				message = message.concat("\n");
+    			}
+    		}
+        	else if(viewSet == 1){
+        		message = mainManager.getListName(listPosition) +  "\n";
+        		subject = "To Do List:" + mainManager.getListName(listPosition);
+    			for(Iterator<ToDoItem> i = mainManager.get(listPosition).iterator(); i.hasNext();){
+    				ToDoItem currentItem = i.next();
+    				if(currentItem.getDone()) message = message.concat("   [X]\t" + currentItem.getText() + "\n");
+					else message = message.concat("   [ ]\t" + currentItem.getText() + "\n");
+    			}
+        	}
+        	sendEmail(subject, message);
+        	return true;
         default:
             return super.onOptionsItemSelected(item); 
 		}
@@ -346,7 +378,6 @@ public class MainActivity extends Activity {
 		      menu.add(Menu.NONE, i, i, menuItems[i]);
 		    }
 		    
-		    contextMenuTypeID = 0;
 		    contextMenuActionTarget = info.position;
 		  }
 		  else if (v.getId()==R.id.list_page_list_view) {
@@ -357,7 +388,6 @@ public class MainActivity extends Activity {
 		      menu.add(Menu.NONE, i, i, menuItems[i]);
 		    }
 		    
-		    contextMenuTypeID = 1;
 		    contextMenuActionTarget = info.position;
 		  }
 		}
@@ -366,7 +396,7 @@ public class MainActivity extends Activity {
 		  AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		  int menuPosition = item.getItemId();
 		  
-		  if(contextMenuTypeID == 0){
+		  if(viewSet == 0){
 			  if(menuPosition == 0){
 				  mainManager.remove(contextMenuActionTarget);
 				  try {
@@ -380,7 +410,7 @@ public class MainActivity extends Activity {
 					mainAdapter.notifyDataSetChanged();
 			  }
 		  }
-		  else if(contextMenuTypeID == 1){
+		  else if(viewSet == 1){
 			  if(menuPosition == 0){
 				  archive.add(mainManager.elementAt(listPosition).get(contextMenuActionTarget));
 				  mainManager.elementAt(listPosition).remove(contextMenuActionTarget);
@@ -414,4 +444,18 @@ public class MainActivity extends Activity {
 		  }
 		  return true;
 		}
+
+	public boolean sendEmail(String subject, String content){
+		Intent i = new Intent(Intent.ACTION_SEND);
+		i.setType("message/rfc822"); 
+		i.putExtra(Intent.EXTRA_SUBJECT, subject);
+		i.putExtra(Intent.EXTRA_TEXT   , content);
+		try {
+		    startActivity(Intent.createChooser(i, "Send mail..."));
+		} catch (android.content.ActivityNotFoundException ex) {
+		    Toast.makeText(MainActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+		    return false;
+		}
+		return true;
+	}
 }

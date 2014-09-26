@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
-public class ToDoListManager extends Vector<ToDoItem> {
+public class ToDoList extends Vector<ToDoItem> {
 	
 	private String listName;
 	
-	ToDoListManager(String n){
+	ToDoList(String n){
 		this.listName = n;
 	}
 

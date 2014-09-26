@@ -15,13 +15,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class ToDoMainAdapter extends ArrayAdapter<ToDoListManager>{
+public class MainListAdapter extends ArrayAdapter<ToDoList>{
 
     Context context; 
     int layoutResourceId;    
-    ArrayList<ToDoListManager> data = null;
+    ArrayList<ToDoList> data = null;
     
-    public ToDoMainAdapter(Context context, int layoutResourceId, ArrayList<ToDoListManager> data) {
+    public MainListAdapter(Context context, int layoutResourceId, ArrayList<ToDoList> data) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.context = context;

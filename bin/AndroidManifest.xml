@@ -36,7 +36,7 @@
         </activity>
         <activity
             android:name=".ArchiveActivity"
-            android:label="@string/title_activity_archive" android:parentActivityName="@string/title_activity_main">
+            android:label="@string/title_activity_archive" android:parentActivityName="@string/main_activity_name">
         </activity>
     </application>
 
