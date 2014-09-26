@@ -1,4 +1,6 @@
 package com.example.todolist;
+import java.util.HashSet;
+import java.util.Set;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +11,22 @@ import java.util.Vector;
  * set of data accessed by the application.
  */
 public class ToDoManager extends Vector<ToDoList>{
+/**
+    * <pre>
+    *           1..1     0..*
+    * ToDoManager ------------------------- ToDoList
+    *           toDoManager        &gt;       toDoList
+    * </pre>
+    */
+   private Set<ToDoList> toDoList;
+   
+   public Set<ToDoList> getToDoList() {
+      if (this.toDoList == null) {
+         this.toDoList = new HashSet<ToDoList>();
+      }
+      return this.toDoList;
+   }
+   
 
 	public void addItem(String name){
 		this.add(new ToDoList(name));

@@ -7,6 +7,23 @@ import java.io.Serializable;
  * in a single item of a to do list.
  */
 public class ToDoItem implements Serializable{
+/**
+    * <pre>
+    *           0..*     1..1
+    * ToDoItem ------------------------- ToDoList
+    *           toDoItem        &lt;       toDoList
+    * </pre>
+    */
+   private ToDoList toDoList;
+   
+   public void setToDoList(ToDoList value) {
+      this.toDoList = value;
+   }
+   
+   public ToDoList getToDoList() {
+      return this.toDoList;
+   }
+   
 	
 	private String text;
 	private Boolean done;
