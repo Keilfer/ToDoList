@@ -2,9 +2,12 @@ package com.example.todolist;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Vector;
 
+/*
+ * Class containing a set of ToDoList objects, used as the main
+ * set of data accessed by the application.
+ */
 public class ToDoManager extends Vector<ToDoList>{
 
 	public void addItem(String name){

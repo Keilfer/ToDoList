@@ -15,6 +15,13 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+/*
+ * Simple extension to the ArrayAdapter class used to display
+ * full to do lists in the MainActivity.
+ * 
+ * Code found in the following tutorial was used in this file:
+ * http://www.ezzylearning.com/tutorial/customizing-android-listview-items-with-custom-arrayadapter
+ */
 public class ToDoListAdapter extends ArrayAdapter<ToDoItem>{
 
     Context context; 

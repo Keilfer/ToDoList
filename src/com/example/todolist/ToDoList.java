@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
+/*
+ * Class used to contain a set of ToDoItems and access
+ * their information. This class is the basic data structure
+ * representing an entire to do list in the app, and so also
+ * contains the name of the list.
+ */
 public class ToDoList extends Vector<ToDoItem> {
 	
 	private String listName;
@@ -40,6 +46,10 @@ public class ToDoList extends Vector<ToDoItem> {
 		return listName;
 	}
 	
+	/*
+	 * Returns the contents of this class as an ArrayList to use
+	 * in an ArrayAdapter.
+	 */
 	public ArrayList<ToDoItem> getItems(){
 		ToDoItem items[] = new ToDoItem[this.size()];
 		return new ArrayList<ToDoItem>(Arrays.asList(this.toArray(items)));

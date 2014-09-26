@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
-
 import android.app.Activity;
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
@@ -25,12 +23,20 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/*
+ * This activity acts as a locked-down version of MainActivity,
+ * only used to display to do list items archived by the user.
+ * They cannot be modified.
+ */
 public class ArchiveActivity extends Activity {
 
 	private ListView toDoListView;
 	private ToDoListAdapter listAdapter;
 	private ArrayList<ToDoItem> archive;
 
+	/*
+	 * Reads archive data from memory, and sets up fiews and adapters.
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,15 +62,17 @@ public class ArchiveActivity extends Activity {
 		getMenuInflater().inflate(R.menu.archive, menu);
 		return true;
 	}
-	
-	public static Object readObject(Context context, String key) throws IOException,
-	   ClassNotFoundException, FileNotFoundException {
-	   FileInputStream fis = context.openFileInput(key);
-	   ObjectInputStream ois = new ObjectInputStream(fis);
-	   Object object = ois.readObject();
-	   return object;
-	}
-	
+
+	/*
+	 * Handles an item being selected from the actionbar menu. The
+	 * viewSet class variable is used to keep track of the context
+	 * in which the various items were clicked.
+	 * home: sends the user back to MainActivity
+	 * stats: calculates and displays various statistics to the user
+	 *    in a popup window.
+	 * send: generates an email containing the contents of the current
+	 *    page, and passes it to sendEmail().
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
@@ -131,6 +139,26 @@ public class ArchiveActivity extends Activity {
 	    return super.onOptionsItemSelected(item);
 	}
 	
+	/*
+	 * Code borrowed from Veaceslav Grec
+	 * http://androidresearch.wordpress.com/2013/04/07/caching-objects-in-android-internal-storage/
+	 * 
+	 * Reads an object from a file.
+	 */
+	public static Object readObject(Context context, String key) throws IOException,
+	   ClassNotFoundException, FileNotFoundException {
+	   FileInputStream fis = context.openFileInput(key);
+	   ObjectInputStream ois = new ObjectInputStream(fis);
+	   Object object = ois.readObject();
+	   return object;
+	}
+	
+	/*
+	 * Borrowed code by user fiXedd on stackoverflow
+	 * http://stackoverflow.com/questions/2197741/how-can-i-send-emails-from-my-android-application
+	 * 
+	 * Opens an email client with the provided subject line and message pre-written.
+	 */
 	public boolean sendEmail(String subject, String content){
 		Intent i = new Intent(Intent.ACTION_SEND);
 		i.setType("message/rfc822"); 

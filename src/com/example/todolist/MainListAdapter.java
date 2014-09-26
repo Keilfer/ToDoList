@@ -1,20 +1,21 @@
 package com.example.todolist;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Vector;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-// http://www.ezzylearning.com/tutorial/customizing-android-listview-items-with-custom-arrayadapter
-
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+/*
+ * Simple extension to the ArrayAdapter class used to display
+ * to do list names in the MainActivity.
+ * 
+ * Code found in the following tutorial was used in this file:
+ * http://www.ezzylearning.com/tutorial/customizing-android-listview-items-with-custom-arrayadapter
+ */
 public class MainListAdapter extends ArrayAdapter<ToDoList>{
 
     Context context; 

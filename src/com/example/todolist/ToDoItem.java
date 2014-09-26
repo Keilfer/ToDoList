@@ -2,6 +2,10 @@ package com.example.todolist;
 
 import java.io.Serializable;
 
+/*
+ * Class used to contain the basic information
+ * in a single item of a to do list.
+ */
 public class ToDoItem implements Serializable{
 	
 	private String text;
